@@ -78,7 +78,7 @@ void Enqueue(pqueueADT pqueue, int newValue)
 
 	if (IsEmpty) {
 		newBlock = New(blockT *);
-		newBlock->values[0] = newValue;
+		newBlock->values[newBlock->counter] = newValue;
 		newBlock->counter++;
 	}
 	for (prev = NULL, cur = pqueue->head; cur != NULL; prev = cur, cur = cur->next) {
@@ -90,8 +90,8 @@ void Enqueue(pqueueADT pqueue, int newValue)
 		newBlock = New(blockT *);
 		newBlock->values[0] = curBlock->values[2]; //flytta över 3e elementet till nya blocket.
 		newBlock->values[1] = curBlock->values[3]; //flytta över 4e elementet till nya blocket.
-		curBlock->counter -= 2;
-		newBlock->counter += 2;
+		curBlock->counter -= 2; //anpassar counter minskar current med två
+		newBlock->counter += 2; // ökar den nya counter med två för att det flyttas över två element
 	}
 	else{
 		curBlock->counter++;

@@ -14,9 +14,11 @@
 int main()
 {
 	pqueueADT queue;
-	//safdasd
+	int value = 5;
+
 	queue = NewPQueue();
-	if (IsEmpty(queue)) printf("IS EMPTY\n");
+	if (IsEmpty(queue)) printf("IS EMPTY\n"); //testar om den är tom
+	Enqueue(queue, value); //testar de olika funktionerna bara 
 	if (IsEmpty(queue)) printf("IS EMPTY\n");
 	/*
 	BasicPQueueTest();
