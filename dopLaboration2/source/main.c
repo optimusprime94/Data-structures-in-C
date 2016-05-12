@@ -14,7 +14,7 @@
 int main()
 {
 	pqueueADT queue;
-
+	//safdasd
 	queue = NewPQueue();
 	if (IsEmpty(queue)) printf("IS EMPTY\n");
 	if (IsEmpty(queue)) printf("IS EMPTY\n");

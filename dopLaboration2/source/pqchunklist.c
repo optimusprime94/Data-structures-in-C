@@ -1,7 +1,7 @@
 /*
 * File: pqchunklist.c
 * ------------------
-*
+* Author: Elvir Dzeko
 * 
 * 
 */
@@ -88,8 +88,8 @@ void Enqueue(pqueueADT pqueue, int newValue)
 	curBlock = cur;
 	if (curBlock->counter = 4) {
 		newBlock = New(blockT *);
-		newBlock->values[0] = curBlock->values[2];
-		newBlock->values[1] = curBlock->values[3];
+		newBlock->values[0] = curBlock->values[2]; //flytta över 3e elementet till nya blocket.
+		newBlock->values[1] = curBlock->values[3]; //flytta över 4e elementet till nya blocket.
 		curBlock->counter -= 2;
 		newBlock->counter += 2;
 	}
