@@ -27,12 +27,16 @@ struct pqueueCDT {
 
 /* Exported entries */
 
+//NewPQueue ska nu fungera riktigt! allokerar minne till en pq och ett nytt block.
 pqueueADT NewPQueue(void)
 {
 	pqueueADT pqueue;
+	blockT block;
 
 	pqueue = New(pqueueADT);
-	pqueue->head = NULL;
+	pqueue->head = New(blockT *);
+	pqueue->head->counter = 0;
+	pqueue->head->next = NULL;
 
 	return (pqueue);
 }
@@ -53,7 +57,7 @@ void FreePQueue(pqueueADT pqueue)
 
 bool IsEmpty(pqueueADT pqueue)
 {
-	return (pqueue->head == NULL);
+	return (pqueue->head->counter == 0);
 }
 
 bool IsFull(pqueueADT pqueue)
@@ -71,15 +75,14 @@ bool IsFull(pqueueADT pqueue)
 * huvud.
 */
 
-void Enqueue(pqueueADT pqueue, int newValue)
+void Enqueue(pqueueADT pqueue, int newValue) //FUNKAR EJ RIKTIGT ÄN
 {
 	blockT *cur, *prev, *newBlock, *curBlock;
 	int i;
 
 	if (IsEmpty) {
-		newBlock = New(blockT *);
-		newBlock->values[newBlock->counter] = newValue;
-		newBlock->counter++;
+		pqueue->head->values[pqueue->head->counter] = newValue;
+		pqueue->head->counter++;
 	}
 	for (prev = NULL, cur = pqueue->head; cur != NULL; prev = cur, cur = cur->next) {
 		if (newValue > cur->values[0]) break;
@@ -88,14 +91,15 @@ void Enqueue(pqueueADT pqueue, int newValue)
 	curBlock = cur;
 	if (curBlock->counter = 4) {
 		newBlock = New(blockT *);
+		//delar på blocken
 		newBlock->values[0] = curBlock->values[2]; //flytta över 3e elementet till nya blocket.
 		newBlock->values[1] = curBlock->values[3]; //flytta över 4e elementet till nya blocket.
-		curBlock->counter -= 2; //anpassar counter minskar current med två
-		newBlock->counter += 2; // ökar den nya counter med två för att det flyttas över två element
+		curBlock->counter = curBlock->counter - 2; //anpassar counter minskar current med två
+		newBlock->counter = curBlock->counter + 2; // ökar den nya counter med två för att det flyttas över två element
 	}
 	else{
+		curBlock->values[curBlock->counter] = newValue;
 		curBlock->counter++;
-		curBlock->values[curBlock->counter];
 	}
 }
 /* Implementation notes: DequeueMax

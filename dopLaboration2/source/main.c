@@ -16,10 +16,10 @@ int main()
 	pqueueADT queue;
 	int value = 5;
 
-	queue = NewPQueue();
+	queue = NewPQueue(); //testar skapa en que
 	if (IsEmpty(queue)) printf("IS EMPTY\n"); //testar om den är tom
 	Enqueue(queue, value); //testar de olika funktionerna bara 
-	if (IsEmpty(queue)) printf("IS EMPTY\n");
+	//if (IsEmpty(queue)) printf("IS EMPTY\n");
 	/*
 	BasicPQueueTest();
 	MorePQueueTest();
