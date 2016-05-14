@@ -14,11 +14,26 @@
 int main()
 {
 	pqueueADT queue;
-	int value = 5;
 
 	queue = NewPQueue(); //testar skapa en que
+
 	if (IsEmpty(queue)) printf("IS EMPTY\n"); //testar om den är tom
-	Enqueue(queue, value); //testar de olika funktionerna bara 
+	Enqueue(queue, 5); //testar de olika funktionerna bara 
+	Enqueue(queue, 3); //testar de olika funktionerna bara 
+	Enqueue(queue, 6); //testar de olika funktionerna bara 
+	Enqueue(queue, 8);
+	Enqueue(queue, 2);
+	Enqueue(queue, 2);
+	if (IsEmpty(queue)) printf("IS EMPTY\n");
+	printf("%d ", DequeueMax(queue));
+	printf("%d ", DequeueMax(queue));
+	printf("%d ", DequeueMax(queue));
+	printf("%d ", DequeueMax(queue));
+	printf("%d ", DequeueMax(queue));
+	printf("%d ", DequeueMax(queue));
+
+	if (IsEmpty(queue)) printf("IS EMPTY\n");
+	getchar();
 	//if (IsEmpty(queue)) printf("IS EMPTY\n");
 	/*
 	BasicPQueueTest();
