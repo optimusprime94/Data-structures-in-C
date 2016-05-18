@@ -33,6 +33,7 @@ pqueueADT NewPQueue(void)
 
 	pqueue = New(pqueueADT);
 	pqueue->head = NULL;
+	
 
 	return (pqueue);
 }
@@ -73,21 +74,42 @@ bool IsFull(pqueueADT pqueue)
 void Enqueue(pqueueADT pqueue, int newValue)
 {
 	blockT *cur, *prev, *newCell;
+	int i, j, temp;
 
 	for (prev = NULL, cur = pqueue->head; cur != NULL; prev = cur, cur = cur->next) {
 		if (newValue > cur->values[0]) break;
+		if (cur == NULL) cur = prev; break; // If newValue is smaller than all elements
+	}
+	if (IsEmpty(pqueue) || cur == MAX_ELEMENTS) {
+		newCell = New(blockT *);
+		newCell->nElem = 0;
+		newCell->values[newCell->nElem] = newValue;
+		newCell->nElem += 1;
+
+		newCell->next = cur;
+		if (prev)
+			prev->next = newCell;
+		else
+			pqueue->head = newCell;
 	}
 
-	newCell = New(blockT *);
-	newCell->nElem = 0;
-	newCell->values[newCell->nElem] = newValue;
-	newCell->nElem += 1;
+	else {
+		cur->values[cur->nElem] = newValue;
+		cur->nElem += 1;
+		/*----------------SORTERING---------------------------*/
+		for (i = 0; i <= cur->nElem; i++) {
+			for (j = 0; j <= cur->nElem; j++) {
 
-	newCell->next = cur;
-	if (prev)
-		prev->next = newCell;
-	else
-		pqueue->head = newCell;
+				if (cur->values[i] > cur->values[j]) { // ta bort det här!
+					temp = cur->values[i];
+					cur->values[i] = cur->values[j];
+					cur->values[j] = temp;
+				}
+			}
+		}
+		/*----------------------------------------------------*/
+	}
+
 }
 
 /* Implementation notes: DequeueMax
@@ -112,11 +134,12 @@ int DequeueMax(pqueueADT pqueue) // Funkar med för linked list.
 	}
 	pqueue->head->nElem--;  // One element less when max is removed.
 
-	if (pqueue->head->nElem == 0) { //removes block if there are 0 elements.
+	if (pqueue->head->nElem == -1) { //removes block if there are 0 elements.
 		toBeDeleted = pqueue->head;
 		pqueue->head = pqueue->head->next;
 		FreeBlock(toBeDeleted);
 	}
+	
 	return (value);
 }
 
