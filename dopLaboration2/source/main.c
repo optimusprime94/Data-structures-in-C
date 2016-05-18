@@ -20,10 +20,12 @@ int main()
 	if (IsEmpty(queue)) printf("IS EMPTY\n"); //testar om den är tom
 	Enqueue(queue, 5); //testar de olika funktionerna bara 
 	Enqueue(queue, 3); //testar de olika funktionerna bara 
-	Enqueue(queue, 6); //testar de olika funktionerna bara 
-	Enqueue(queue, 8);
+	Enqueue(queue, 8); //testar de olika funktionerna bara 
+	Enqueue(queue, 6);
+	Enqueue(queue, 4);
 	Enqueue(queue, 2);
-	Enqueue(queue, 2);
+	Enqueue(queue, 7);
+
 	if (IsEmpty(queue)) printf("IS EMPTY\n");
 	printf("%d ", DequeueMax(queue));
 	printf("%d ", DequeueMax(queue));
