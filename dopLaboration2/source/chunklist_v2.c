@@ -11,7 +11,7 @@
 
 /* Constants */
 
-#define MAX_ELEMENTS 4
+#define MAX_ELEMENTS 5
 
 /* Types */
 
@@ -23,6 +23,7 @@ typedef struct blockT {
 
 struct pqueueCDT {
 	blockT *head;
+	blockT *cursor;
 };
 
 /* Exported entries */
@@ -74,17 +75,17 @@ bool IsFull(pqueueADT pqueue)
 void Enqueue(pqueueADT pqueue, int newValue)
 {
 	blockT *cur, *prev, *newCell;
-	int i, j, temp;
+	int i,j,temp;
 
 	for (prev = NULL, cur = pqueue->head; cur != NULL; prev = cur, cur = cur->next) {
 		if (newValue > cur->values[0]) break;
 		if (cur == NULL) cur = prev; break; // If newValue is smaller than all elements
 	}
-	if (IsEmpty(pqueue) || cur == MAX_ELEMENTS) {
+	if (IsEmpty(pqueue) || cur->nElem >= MAX_ELEMENTS - 1) {
 		newCell = New(blockT *);
 		newCell->nElem = 0;
 		newCell->values[newCell->nElem] = newValue;
-		newCell->nElem += 1;
+		newCell->nElem ++;
 
 		newCell->next = cur;
 		if (prev)
@@ -92,13 +93,13 @@ void Enqueue(pqueueADT pqueue, int newValue)
 		else
 			pqueue->head = newCell;
 	}
-
 	else {
 		cur->values[cur->nElem] = newValue;
-		cur->nElem += 1;
+		cur->nElem ++;
+
 		/*----------------SORTERING---------------------------*/
-		for (i = 0; i <= cur->nElem; i++) {
-			for (j = 0; j <= cur->nElem; j++) {
+		for (i = 0; i < cur->nElem; i++) {
+			for (j = 0; j < cur->nElem; j++) {
 
 				if (cur->values[i] > cur->values[j]) { // ta bort det här!
 					temp = cur->values[i];
@@ -108,6 +109,7 @@ void Enqueue(pqueueADT pqueue, int newValue)
 			}
 		}
 		/*----------------------------------------------------*/
+
 	}
 
 }
@@ -134,12 +136,11 @@ int DequeueMax(pqueueADT pqueue) // Funkar med för linked list.
 	}
 	pqueue->head->nElem--;  // One element less when max is removed.
 
-	if (pqueue->head->nElem == -1) { //removes block if there are 0 elements.
+	if (pqueue->head->nElem == 0) { //removes block if there are 0 elements.
 		toBeDeleted = pqueue->head;
 		pqueue->head = pqueue->head->next;
 		FreeBlock(toBeDeleted);
 	}
-	
 	return (value);
 }
 

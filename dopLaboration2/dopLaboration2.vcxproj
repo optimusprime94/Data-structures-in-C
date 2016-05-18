@@ -163,9 +163,9 @@
     <Library Include="lib\PCLibs2015.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\chunklist_v2.c" />
     <ClCompile Include="source\main.c" />
     <ClCompile Include="source\performance.c" />
-    <ClCompile Include="source\pqchunklist.c" />
     <ClCompile Include="source\pqueuetest.c" />
   </ItemGroup>
   <ItemGroup>
