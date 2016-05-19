@@ -166,6 +166,14 @@
     <ClCompile Include="source\chunklist_v2.c" />
     <ClCompile Include="source\main.c" />
     <ClCompile Include="source\performance.c" />
+    <ClCompile Include="source\pqchunklist.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="source\pqlist.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="source\pqueuetest.c" />
   </ItemGroup>
   <ItemGroup>

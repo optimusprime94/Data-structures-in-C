@@ -11,7 +11,7 @@
 
 /* Constants */
 
-#define MAX_ELEMENTS 5
+#define MAX_ELEMENTS 4
 
 /* Types */
 
@@ -79,13 +79,43 @@ void Enqueue(pqueueADT pqueue, int newValue)
 
 	for (prev = NULL, cur = pqueue->head; cur != NULL; prev = cur, cur = cur->next) {
 		if (newValue > cur->values[0]) break;
-		if (cur == NULL) cur = prev; break; // If newValue is smaller than all elements
 	}
-	if (IsEmpty(pqueue) || cur->nElem >= MAX_ELEMENTS - 1) {
+	if (cur) {
+		if (cur->nElem < MAX_ELEMENTS) {
+			//placera på rätt plats
+			cur->values[cur->nElem] = newValue;
+			cur->nElem++;
+			/*----------------SORTERING---------------------------*/
+			for (i = 0; i <= cur->nElem; i++) {
+				for (j = 0; j <= cur->nElem; j++) {
+
+					if (cur->values[i] > cur->values[j]) { // ta bort det här!
+						temp = cur->values[i];
+						cur->values[i] = cur->values[j];
+						cur->values[j] = temp;
+					}
+				}
+			}
+			/*----------------------------------------------------*/
+		}
+		else {
+			newCell = New(blockT *);
+			newCell->nElem = 0;
+			newCell->values[newCell->nElem] = newValue;
+			newCell->nElem++;
+
+			newCell->next = cur;
+			if (prev)
+				prev->next = newCell;
+			else
+				pqueue->head = newCell;
+		}
+	}
+	else {
 		newCell = New(blockT *);
 		newCell->nElem = 0;
 		newCell->values[newCell->nElem] = newValue;
-		newCell->nElem ++;
+		newCell->nElem++;
 
 		newCell->next = cur;
 		if (prev)
@@ -93,26 +123,8 @@ void Enqueue(pqueueADT pqueue, int newValue)
 		else
 			pqueue->head = newCell;
 	}
-	else {
-		cur->values[cur->nElem] = newValue;
-		cur->nElem ++;
-
-		/*----------------SORTERING---------------------------*/
-		for (i = 0; i < cur->nElem; i++) {
-			for (j = 0; j < cur->nElem; j++) {
-
-				if (cur->values[i] > cur->values[j]) { // ta bort det här!
-					temp = cur->values[i];
-					cur->values[i] = cur->values[j];
-					cur->values[j] = temp;
-				}
-			}
-		}
-		/*----------------------------------------------------*/
-
 	}
 
-}
 
 /* Implementation notes: DequeueMax
 * --------------------------------

@@ -70,7 +70,7 @@ void Enqueue(pqueueADT pqueue, int newValue)
 	newCell = New(cellT *);
  	newCell->value = newValue;
  	
- 	for (prev = NULL, cur = pqueue->head; cur != NULL; prev = cur, cur = cur->next) {
+for (prev = NULL, cur = pqueue->head; cur != NULL; prev = cur, cur = cur->next) {
  		if (newValue > cur->value) break;
  	}
  	newCell->next = cur;
@@ -81,7 +81,7 @@ void Enqueue(pqueueADT pqueue, int newValue)
 }
 
 /* Implementation notes: DequeueMax
- * --------------------------------
+ //* --------------------------------
  * Det största värdet sparas först i listan så att det är
  * enkelt att ta bort. Notera att minne för noder frigörs
  * vid borttagning ur kön.
@@ -95,9 +95,9 @@ int DequeueMax(pqueueADT pqueue)
 	if (IsEmpty(pqueue))
 		Error("Tried to dequeue max from an empty pqueue!");
 
- 	toBeDeleted = pqueue->head;
- 	value = pqueue->head->value;
- 	pqueue->head = pqueue->head->next; 	
+	toBeDeleted = pqueue->head;
+	value = pqueue->head->value;
+	pqueue->head = pqueue->head->next;
 	FreeBlock(toBeDeleted);
 	return (value);
 }
