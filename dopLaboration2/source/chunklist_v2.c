@@ -1,9 +1,8 @@
-/*
-* File: pqlist.c
+/* File: pqlist.c
 * ------------------
-*
-* Niclas Åstrand, Data- och programstrukturer HT-2003
-* Senast modifierad: 23/7 - 2003
+* Authors: Elvir Dzeko och Carlos Penaloza, 2016
+* 
+* 
 */
 
 #include "pqueue.h"
@@ -75,38 +74,50 @@ bool IsFull(pqueueADT pqueue)
 void Enqueue(pqueueADT pqueue, int newValue)
 {
 	blockT *cur, *prev, *newCell;
-	int i,j,temp;
+	int i,j,temp, size;
 
 	for (prev = NULL, cur = pqueue->head; cur != NULL; prev = cur, cur = cur->next) {
 		if (newValue > cur->values[0]) break;
 	}
 	if (cur) {
+
+		size = cur->nElem;
+
 		if (cur->nElem < MAX_ELEMENTS) {
 			//placera på rätt plats
 			cur->values[cur->nElem] = newValue;
 			cur->nElem++;
-			/*----------------SORTERING---------------------------*/
-			for (i = 0; i <= cur->nElem; i++) {
-				for (j = 0; j <= cur->nElem; j++) {
+			i = size;
+			/*----------------SORTING---------------------------*/
+			while (i > 0 && cur->values[i] > cur->values[i - 1]) {
+				temp = cur->values[i];
+				cur->values[i] = cur->values[i - 1];
+				cur->values[i - 1] = temp;
 
-					if (cur->values[i] > cur->values[j]) { // ta bort det här!
-						temp = cur->values[i];
-						cur->values[i] = cur->values[j];
-						cur->values[j] = temp;
-					}
-				}
+				i--;
 			}
 			/*----------------------------------------------------*/
 		}
 		else {
 			newCell = New(blockT *);
-			newCell->nElem = 0;
-			newCell->next = cur;
+			newCell->nElem = 2;
+			newCell->values[0] = cur->values[0]; // Moves first 2 values to newBlock.
+			newCell->values[1] = cur->values[1]; // Moves first 2 values to newBlock.
+			cur->values[2] = cur->values[0]; // Moves Later values to the beginning.
+			cur->values[3] = cur->values[1]; // Moves first 2 values to newBlock.
+			cur->values[2] = NULL;
+			cur->values[3] = NULL;
+			cur->nElem = 2;
+			//newCell->values[newCell->nElem] = newValue;
+			//newCell->nElem++;
 
+			newCell->next = cur;
 			if (prev)
 				prev->next = newCell;
 			else
 				pqueue->head = newCell;
+
+
 		}
 	}
 	else {
@@ -116,10 +127,7 @@ void Enqueue(pqueueADT pqueue, int newValue)
 		newCell->nElem++;
 
 		newCell->next = cur;
-		if (prev)
-			prev->next = newCell;
-		else
-			pqueue->head = newCell;
+		pqueue->head = newCell;
 	}
 	}
 
@@ -131,7 +139,7 @@ void Enqueue(pqueueADT pqueue, int newValue)
 * vid borttagning ur kön.
 */
 
-int DequeueMax(pqueueADT pqueue) // Funkar med för linked list.
+int DequeueMax(pqueueADT pqueue) 
 {
 	blockT *toBeDeleted;
 	int value, i;
@@ -140,13 +148,16 @@ int DequeueMax(pqueueADT pqueue) // Funkar med för linked list.
 		Error("Tried to dequeue max from an empty pqueue!");
 
 	value = pqueue->head->values[0]; // Max is at index 0, in head-block.
-						
-	for (i = 0; i <= pqueue->head->nElem; i++) {  
-		pqueue->head->values[i] = pqueue->head->values[i + 1];  // Moves values in block, from (i + 1) to i index, to remove max.
+	
+	while (pqueue->head->nElem > 0) { // while-loop because the for-loop below does not work when there is only one element.
+		for (i = 0; i < pqueue->head->nElem; i++) {
+			pqueue->head->values[i] = pqueue->head->values[i + 1];  // Moves values in block, from (i + 1) to i index, to remove max.
+		}
+		break;
 	}
 	pqueue->head->nElem--;  // One element less when max is removed.
 
-	if (pqueue->head->nElem == 0) { //removes block if there are 0 elements.
+	if (pqueue->head->nElem <= 0) { //removes block if there are 0 elements.
 		toBeDeleted = pqueue->head;
 		pqueue->head = pqueue->head->next;
 		FreeBlock(toBeDeleted);
