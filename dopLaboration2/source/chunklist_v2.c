@@ -101,10 +101,8 @@ void Enqueue(pqueueADT pqueue, int newValue)
 		else {
 			newCell = New(blockT *);
 			newCell->nElem = 0;
-			newCell->values[newCell->nElem] = newValue;
-			newCell->nElem++;
-
 			newCell->next = cur;
+
 			if (prev)
 				prev->next = newCell;
 			else
