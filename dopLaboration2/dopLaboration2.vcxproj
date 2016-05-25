@@ -163,7 +163,10 @@
     <Library Include="lib\PCLibs2015.lib" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\chunklist_v2.c" />
+    <ClCompile Include="source\chunklist_v2.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="source\main.c" />
     <ClCompile Include="source\performance.c" />
     <ClCompile Include="source\pqlist.c">

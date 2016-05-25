@@ -2,7 +2,7 @@
 * ------------------
 * Authors: Elvir Dzeko och Carlos Penaloza, 2016
 * 
-* 
+* Random numbers blir inte sorterade!
 */
 
 #include "pqueue.h"
@@ -73,21 +73,19 @@ bool IsFull(pqueueADT pqueue)
 
 void Enqueue(pqueueADT pqueue, int newValue)
 {
-	blockT *cur, *prev, *newCell;
+	blockT *cur, *prev, *newBlock, *tempBlock;
 	int i,j,temp, size;
 
 	for (prev = NULL, cur = pqueue->head; cur != NULL; prev = cur, cur = cur->next) {
-		if (newValue > cur->values[0]) break;
+		if (newValue > cur->values[cur->nElem - 1]) break; // Compares to the last value in sorted block, because if it is bigger, then it should not go to the next.
+		if (cur->next == NULL) break;
 	}
 	if (cur) {
-
-		size = cur->nElem;
-
+		/* Inserts element in block */
 		if (cur->nElem < MAX_ELEMENTS) {
-			//placera på rätt plats
 			cur->values[cur->nElem] = newValue;
 			cur->nElem++;
-			i = size;
+			i = cur->nElem - 1;
 			/*----------------SORTING---------------------------*/
 			while (i > 0 && cur->values[i] > cur->values[i - 1]) {
 				temp = cur->values[i];
@@ -98,36 +96,54 @@ void Enqueue(pqueueADT pqueue, int newValue)
 			}
 			/*----------------------------------------------------*/
 		}
+		/* Splits block when full */
 		else {
-			newCell = New(blockT *);
-			newCell->nElem = 2;
-			newCell->values[0] = cur->values[0]; // Moves first 2 values to newBlock.
-			newCell->values[1] = cur->values[1]; // Moves first 2 values to newBlock.
-			cur->values[2] = cur->values[0]; // Moves Later values to the beginning.
-			cur->values[3] = cur->values[1]; // Moves first 2 values to newBlock.
+			newBlock = New(blockT *);
+			newBlock->nElem = 2;
+			newBlock->values[0] = cur->values[0]; 
+			newBlock->values[1] = cur->values[1]; 
+			cur->values[0] = cur->values[2]; 
+			cur->values[1] = cur->values[3];
 			cur->values[2] = NULL;
 			cur->values[3] = NULL;
 			cur->nElem = 2;
-			//newCell->values[newCell->nElem] = newValue;
-			//newCell->nElem++;
 
-			newCell->next = cur;
+			newBlock->next = cur;
 			if (prev)
-				prev->next = newCell;
+				prev->next = newBlock;
 			else
-				pqueue->head = newCell;
+				pqueue->head = newBlock;
 
+			if (newValue > cur->values[0])
+				tempBlock = newBlock;
+			else  tempBlock = cur;
+
+			tempBlock->values[tempBlock->nElem] = newValue;
+			tempBlock->nElem++;
+			i = tempBlock->nElem-1;
+			/*----------------SORTING---------------------------*/
+			while (i > 0 && tempBlock->values[i] > tempBlock->values[i - 1]) {
+				temp = tempBlock->values[i];
+				tempBlock->values[i] = tempBlock->values[i - 1];
+				tempBlock->values[i - 1] = temp;
+
+				i--;
+			}
+			/*----------------------------------------------------*/
 
 		}
 	}
+	/* Creates first block */
 	else {
-		newCell = New(blockT *);
-		newCell->nElem = 0;
-		newCell->values[newCell->nElem] = newValue;
-		newCell->nElem++;
-
-		newCell->next = cur;
-		pqueue->head = newCell;
+		newBlock = New(blockT *);
+		newBlock->nElem = 0;
+		newBlock->values[newBlock->nElem] = newValue;
+		newBlock->nElem++;
+		newBlock->next = cur;
+		if (prev)
+			prev->next = newBlock;
+		else
+			pqueue->head = newBlock;
 	}
 	}
 
@@ -147,17 +163,18 @@ int DequeueMax(pqueueADT pqueue)
 	if (IsEmpty(pqueue))
 		Error("Tried to dequeue max from an empty pqueue!");
 
-	value = pqueue->head->values[0]; // Max is at index 0, in head-block.
-	
-	while (pqueue->head->nElem > 0) { // while-loop because the for-loop below does not work when there is only one element.
+	value = pqueue->head->values[0]; // Max value is at index 0, in head-block.
+
+	/* Re-organizes values when max is removed */
+	while (pqueue->head->nElem > 0) { 
 		for (i = 0; i < pqueue->head->nElem; i++) {
-			pqueue->head->values[i] = pqueue->head->values[i + 1];  // Moves values in block, from (i + 1) to i index, to remove max.
+			pqueue->head->values[i] = pqueue->head->values[i + 1]; 
 		}
 		break;
 	}
-	pqueue->head->nElem--;  // One element less when max is removed.
-
-	if (pqueue->head->nElem <= 0) { //removes block if there are 0 elements.
+	pqueue->head->nElem--;  // because (max) is removed.
+	/* Frees block when empty */
+	if (pqueue->head->nElem <= 0) { 
 		toBeDeleted = pqueue->head;
 		pqueue->head = pqueue->head->next;
 		FreeBlock(toBeDeleted);
