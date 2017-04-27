@@ -1,10 +1,12 @@
-Biblioteken kompilerade för VS2015 med statisk C runtime.
+Biblioteken kompilerade fÃ¶r VS2015 med statisk C runtime.
 
-För ditt projekt som skall använda MazeLib2015.lib (det besvärligaste
-biblioteket) eller om du får länkfel om LIBCMD och/eller fel om
-/SAFESEH från länkaren:
+FÃ¶r ditt projekt som skall anvÃ¤nda MazeLib2015.lib (det besvÃ¤rligaste
+biblioteket) eller om du fÃ¥r lÃ¤nkfel om LIBCMD och/eller fel om
+/SAFESEH frÃ¥n lÃ¤nkaren:
 
-* Sätt projekt->C++/C->Code Generation->Runtime Library till "Multi-threaded Debug"
+* SÃ¤tt projekt->C++/C->Code Generation->Runtime Library till "Multi-threaded Debug"
 
-* Sätt projekt->Linker->Advanced->Image Has Safe Exception Handlers till "No (/SAFESEH:NO)"
+* SÃ¤tt projekt->Linker->Advanced->Image Has Safe Exception Handlers till "No (/SAFESEH:NO)"
+
+The Chunklist is made by Me /Optimus Prime
 
